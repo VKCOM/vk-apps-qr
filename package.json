@@ -6,7 +6,9 @@
   "homepage": "https://VKCOM.github.io/vk-apps-qr/",
   "scripts": {
     "start": "cross-env PORT=10888 react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +17,7 @@
     "cross-env": "^5.2.0",
     "gh-pages": "^2.0.1",
     "react-hot-loader": "^4.8.0",
-    "react-scripts": "^2.1.8",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "react-scripts": "^2.1.8"
   },
   "dependencies": {
     "@vkontakte/icons": "^1.4.3",
