@@ -73,7 +73,7 @@ class App extends React.Component {
 
                         <Div>
                             <Button before={<Icon24Download/>} size="l" onClick={() => {
-                                saveSvgAsPng(this.svgRef.current.children[0], "png.png", {backgroundColor: '#fff'})
+                                saveSvgAsPng(this.svgRef.current.children[0], "png.png")
                             }}>PNG</Button>
                             <Download style={{display: 'inline'}} file="qr.svg" content={svg}>
                                 <Button before={<Icon24Download/>} size="l">SVG</Button>
