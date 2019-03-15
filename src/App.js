@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Div, FormLayout, Group, Input, ListItem, Panel, PanelHeader, View} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import qrCodeGenerator from 'vk-qr';
+import qrCodeGenerator from '@vkontakte/vk-qr';
 
 class App extends React.Component {
     constructor(props) {
@@ -18,13 +18,12 @@ class App extends React.Component {
         let segs = qrCodeGenerator.QrSegment.makeSegments(url);
         let svg = qrCodeGenerator.QrCode.encodeSegments(segs, qrCodeGenerator.QrCode.Ecc.QUARTILE, 1, 40, -1, true).toSvgString();
 
-        return <span dangerouslySetInnerHTML={{__html: svg}}/>;
+        return <span dangerouslySetInnerHTML={{__html: url ? svg : ''}}/>;
     }
 
-
     onChange(e) {
-        const { name, value } = e.currentTarget;
-        this.setState({ [name]: value });
+        const {name, value} = e.currentTarget;
+        this.setState({[name]: value});
     }
 
     render() {
