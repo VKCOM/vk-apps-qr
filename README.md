@@ -1,10 +1,10 @@
-## How to install
+## Example
 
-`npx @vkontakte/create-vk-app <folder name>`
+`
+import qrCodeGenerator from '@vkontakte/vk-qr';
 
-## How to start
+let segs = qrCodeGenerator.QrSegment.makeSegments(url);
+let svg = qrCodeGenerator.QrCode.encodeSegments(segs, qrCodeGenerator.QrCode.Ecc.QUARTILE, 1, 40, -1, true).toSvgString();
 
-Go to created folder and run:
-`yarn start` || `npm start` — this will start dev server with hot reload on `localhost:10888`.
-
-`yarn run build` || `npm run build` — this will build production bundle, with treeshaking, uglify and all this modern fancy stuff
+return <span dangerouslySetInnerHTML={{svg}}/>;
+`
