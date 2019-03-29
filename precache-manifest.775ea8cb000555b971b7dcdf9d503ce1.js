@@ -8,15 +8,15 @@ self.__precacheManifest = [
     "url": "/vk-apps-qr/static/js/main.cdb6eb6c.chunk.js"
   },
   {
-    "revision": "cac9e4385c556b5bdb14",
-    "url": "/vk-apps-qr/static/js/2.ec2c2427.chunk.js"
+    "revision": "2af416eecc71526ceeed",
+    "url": "/vk-apps-qr/static/js/2.3205251b.chunk.js"
   },
   {
-    "revision": "cac9e4385c556b5bdb14",
+    "revision": "2af416eecc71526ceeed",
     "url": "/vk-apps-qr/static/css/2.7dfc52c1.chunk.css"
   },
   {
-    "revision": "f3aa25677534b6e1864a3f673ae41896",
+    "revision": "e6d78c9804523520b2dd8e70834b5570",
     "url": "/vk-apps-qr/index.html"
   }
 ];
