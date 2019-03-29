@@ -11,8 +11,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            url: 'https://vk.com',
-            size: '300',
+            url: 'https://vk.com'
         };
 
         this.svgRef = React.createRef();
@@ -54,31 +53,21 @@ class App extends React.Component {
                                 status={url ? 'valid' : 'error'}
                                 bottom={url ? '' : 'Введите URL'}
                             />
-
-                            <Select top="Размер" name="size" onChange={this.onChange}>
-                                <option value="300">300x300</option>
-                                <option value="500">500x500</option>
-                                <option value="200">200x200</option>
-                                <option value="100">100x100</option>
-                            </Select>
                         </FormLayout>
 
                         <Div style={{
-                            width: size + 'px',
-                            height: size + 'px',
                             margin: 'auto'
                         }}>
                             {this.svg(url, size)}
                         </Div>
 
-                        <Div>
-                            <Button before={<Icon24Download/>} size="l" onClick={() => {
+                        <Div style={{display: 'flex'}}>
+                            <Button before={<Icon24Download/>} size="l" style={{ marginRight: 8 }} onClick={() => {
                                 saveSvgAsPng(this.svgRef.current.children[0], "png.png")
                             }}>PNG</Button>
-                            <Download style={{display: 'inline'}} file="qr.svg" content={svg}>
-                                <Button before={<Icon24Download/>} size="l">SVG</Button>
+                            <Download file="qr.svg" content={svg}>
+                                <Button before={<Icon24Download/>}  size="l">SVG</Button>
                             </Download>
-
                         </Div>
                     </Group>
                 </Panel>
