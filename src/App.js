@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Div, FormLayout, Group, Input, ListItem, Panel, PanelHeader, Select, View} from '@vkontakte/vkui';
+import {Button, Div, FormStatus, FormLayout, Group, Input, ListItem, Panel, PanelHeader, Select, View} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import qrCodeGenerator from '@vkontakte/vk-qr';
 import Download from '@axetroy/react-download';
@@ -46,22 +46,23 @@ class App extends React.Component {
                         <FormLayout>
                             <Input
                                 type="string"
-                                top="URL"
+                                top="Ссылка"
                                 name="url"
                                 value={url}
                                 onChange={this.onChange}
                                 status={url ? 'valid' : 'error'}
-                                bottom={url ? '' : 'Введите URL'}
+                                bottom={url ? '' : 'Введите ссылку'}
                             />
                         </FormLayout>
 
                         <Div style={{
-                            margin: 'auto'
+                            margin: 'auto',
+                            width: '257px',
                         }}>
                             {this.svg(url, size)}
                         </Div>
 
-                        <Div style={{display: 'flex'}}>
+                        <Div style={{display: 'flex', 'justifyContent': 'center'}}>
                             <Button before={<Icon24Download/>} size="l" style={{ marginRight: 8 }} onClick={() => {
                                 saveSvgAsPng(this.svgRef.current.children[0], "png.png")
                             }}>PNG</Button>
