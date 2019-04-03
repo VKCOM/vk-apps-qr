@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Div, FormStatus, FormLayout, Group, Input, ListItem, Panel, PanelHeader, Select, View} from '@vkontakte/vkui';
+import {Button, Div, FormLayout, Group, Input, Panel, PanelHeader, View} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import qrCodeGenerator from '@vkontakte/vk-qr';
 import Download from '@axetroy/react-download';
@@ -17,13 +17,17 @@ class App extends React.Component {
         this.svgRef = React.createRef();
 
         this.onChange = this.onChange.bind(this);
+        this.savePNG = this.savePNG.bind(this);
     }
 
     svg(url) {
-        let segs = qrCodeGenerator.QrSegment.makeSegments(url);
-        let svg = qrCodeGenerator.QrCode.encodeSegments(segs, qrCodeGenerator.QrCode.Ecc.QUARTILE, 1, 40, -1, true).toSvgString();
+        const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode');
 
-        return <span ref={this.svgRef} dangerouslySetInnerHTML={{__html: url ? svg : ''}}/>;
+        return <span ref={this.svgRef} dangerouslySetInnerHTML={{__html: url ? qrSvg : ''}}/>;
+    }
+
+    savePNG() {
+        saveSvgAsPng(this.svgRef.current.children[0], "png.png")
     }
 
     onChange(e) {
@@ -32,7 +36,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {url, size} = this.state;
+        const {url} = this.state;
 
         let segs = qrCodeGenerator.QrSegment.makeSegments(url);
         let svg = qrCodeGenerator.QrCode.encodeSegments(segs, qrCodeGenerator.QrCode.Ecc.QUARTILE, 1, 40, -1, true).toSvgString();
@@ -56,18 +60,15 @@ class App extends React.Component {
                         </FormLayout>
 
                         <Div style={{
-                            margin: 'auto',
-                            width: '257px',
+                            textAlign: 'center',
                         }}>
-                            {this.svg(url, size)}
+                            {this.svg(url)}
                         </Div>
 
-                        <Div style={{display: 'flex', 'justifyContent': 'center'}}>
-                            <Button before={<Icon24Download/>} size="l" style={{ marginRight: 8 }} onClick={() => {
-                                saveSvgAsPng(this.svgRef.current.children[0], "png.png")
-                            }}>PNG</Button>
-                            <Download file="qr.svg" content={svg}>
-                                <Button before={<Icon24Download/>}  size="l">SVG</Button>
+                        <Div style={{display: 'flex', 'justifyContent': 'space-between'}}>
+                            <Button before={<Icon24Download/>} size="xl" style={{ maxWidth: 'calc(50% - 4px)' }} onClick={this.savePNG} stretched>PNG</Button>
+                            <Download file="qr.svg" content={svg} style={{ flexGrow: 1, maxWidth: 'calc(50% - 4px)' }}>
+                                <Button before={<Icon24Download/>} size="xl" stretched>SVG</Button>
                             </Download>
                         </Div>
                     </Group>
