@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Div, FormLayout, Group, Input, Panel, PanelHeader, View} from '@vkontakte/vkui';
+import {Button, Checkbox, Div, FormLayout, Group, Input, Panel, PanelHeader, View} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import qrCodeGenerator from '@vkontakte/vk-qr';
 import Download from '@axetroy/react-download';
@@ -11,7 +11,8 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            url: 'https://vk.com'
+            url: 'https://vk.com',
+            showLogo: true
         };
 
         this.svgRef = React.createRef();
@@ -20,27 +21,23 @@ class App extends React.Component {
         this.savePNG = this.savePNG.bind(this);
     }
 
-    svg(url) {
-        const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode');
-
-        return <span ref={this.svgRef} dangerouslySetInnerHTML={{__html: url ? qrSvg : ''}}/>;
-    }
-
     savePNG() {
-        saveSvgAsPng(this.svgRef.current.children[0], "png.png")
+        saveSvgAsPng(this.svgRef.current.children[0], 'png.png')
     }
 
     onChange(e) {
-        const {name, value} = e.currentTarget;
-        this.setState({[name]: value});
+        const {name, value, checked} = e.currentTarget;
+        if (name === 'showLogo') {
+            this.setState({[name]: checked});
+        } else {
+            this.setState({[name]: value});
+        }
     }
 
     render() {
-        const {url} = this.state;
+        const {url, showLogo} = this.state;
 
-        let segs = qrCodeGenerator.QrSegment.makeSegments(url);
-        let svg = qrCodeGenerator.QrCode.encodeSegments(segs, qrCodeGenerator.QrCode.Ecc.QUARTILE, 1, 40, -1, true).toSvgString();
-
+        const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode', showLogo);
 
         return (
             <View activePanel="mainPanel">
@@ -57,17 +54,21 @@ class App extends React.Component {
                                 status={url ? 'valid' : 'error'}
                                 bottom={url ? '' : 'Введите ссылку'}
                             />
+
+                            <Checkbox name="showLogo" checked={showLogo} onChange={this.onChange}>Использовать логотип
+                                ВКонтакте</Checkbox>
                         </FormLayout>
 
                         <Div style={{
                             textAlign: 'center',
                         }}>
-                            {this.svg(url)}
+                            <span ref={this.svgRef} dangerouslySetInnerHTML={{__html: url ? qrSvg : ''}}/>
                         </Div>
 
                         <Div style={{display: 'flex', 'justifyContent': 'space-between'}}>
-                            <Button before={<Icon24Download/>} size="xl" style={{ maxWidth: 'calc(50% - 4px)' }} onClick={this.savePNG} stretched>PNG</Button>
-                            <Download file="qr.svg" content={svg} style={{ flexGrow: 1, maxWidth: 'calc(50% - 4px)' }}>
+                            <Button before={<Icon24Download/>} size="xl" style={{maxWidth: 'calc(50% - 4px)'}}
+                                    onClick={this.savePNG} stretched>PNG</Button>
+                            <Download file="qr.svg" content={qrSvg} style={{flexGrow: 1, maxWidth: 'calc(50% - 4px)'}}>
                                 <Button before={<Icon24Download/>} size="xl" stretched>SVG</Button>
                             </Download>
                         </Div>
