@@ -16,7 +16,7 @@ import qrCodeGenerator from '@vkontakte/vk-qr';
 import Download from '@axetroy/react-download';
 import Icon24Download from '@vkontakte/icons/dist/24/download';
 import {saveSvgAsPng} from 'save-svg-as-png';
-import {TwitterPicker} from 'react-color';
+import {CirclePicker} from 'react-color';
 import queryString from 'query-string'
 
 class App extends React.Component {
@@ -77,8 +77,8 @@ class App extends React.Component {
 
         const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode', options);
 
-        let backgroundPresets = ['#FFFFFF', '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7'];
-        let foregroundPresets = ['#000000', '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7'];
+        let backgroundPresets = ['#FFFFFF', '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC'];
+        let foregroundPresets = ['#000000', '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC'];
 
         return (
             <View activePanel="mainPanel">
@@ -106,8 +106,16 @@ class App extends React.Component {
 
                             <FormLayoutGroup top="Цвет QR-кода">
                                 <Div>
-                                    <TwitterPicker triangle='hide' colors={foregroundPresets} color={foregroundColor}
-                                                   onChangeComplete={this.onForegroundColorChange}/>
+                                    <div style={{
+                                        borderRadius: 25,
+                                        background: 'var(--background_page)',
+                                        padding: 5,
+                                        display: 'flex',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <CirclePicker triangle='hide' colors={foregroundPresets} color={foregroundColor}
+                                                      onChangeComplete={this.onForegroundColorChange}/>
+                                    </div>
                                 </Div>
                             </FormLayoutGroup>
 
@@ -116,8 +124,17 @@ class App extends React.Component {
 
                             {isShowBackground ? (<FormLayoutGroup top="Цвет фона">
                                 <Div>
-                                    <TwitterPicker triangle='hide' colors={backgroundPresets} color={backgroundColor}
-                                                   onChangeComplete={this.onBackgroundColorChange}/>
+                                    <div style={{
+                                        borderRadius: 25,
+                                        background: 'var(--background_page)',
+                                        padding: 5,
+                                        display: 'flex',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <CirclePicker style={{backgroundColor: 'red'}} triangle='hide'
+                                                      colors={backgroundPresets} color={backgroundColor}
+                                                      onChangeComplete={this.onBackgroundColorChange}/>
+                                    </div>
                                 </Div>
                             </FormLayoutGroup>) : (null)}
                         </FormLayout>
