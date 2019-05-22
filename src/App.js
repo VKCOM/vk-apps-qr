@@ -36,6 +36,7 @@ class App extends React.Component {
         this.svgRef = React.createRef();
 
         this.onChange = this.onChange.bind(this);
+        this.onUpload = this.onUpload.bind(this);
         this.savePNG = this.savePNG.bind(this);
     }
 
@@ -47,6 +48,20 @@ class App extends React.Component {
 
     savePNG() {
         saveSvgAsPng(this.svgRef.current.children[0], 'png.png')
+    }
+
+    onUpload(e) {
+      let self = this;
+      let file = e.currentTarget.files[0];
+      if (file && file.type  === 'image/svg+xml') {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          self.setState({
+            logoData: reader.result
+          });
+        };
+      }
     }
 
     onChange(e) {
@@ -67,12 +82,13 @@ class App extends React.Component {
     };
 
     render() {
-        const {allowDownload, url, isShowLogo, isShowBackground, backgroundColor, foregroundColor} = this.state;
+        const {allowDownload, url, isShowLogo, isShowBackground, backgroundColor, foregroundColor, logoData} = this.state;
         const options = {
             isShowLogo: isShowLogo,
             isShowBackground: isShowBackground,
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
+            logoData: logoData,
         };
 
         const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode', options);
@@ -101,9 +117,9 @@ class App extends React.Component {
                         <FormLayout>
                             <Checkbox name="isShowLogo" checked={isShowLogo} onChange={this.onChange}>Использовать
                                 логотип
-                                ВКонтакте</Checkbox>
+                                </Checkbox>
 
-
+                            <Input top="SVG-логотип" type="file" name="embed" onChange={this.onUpload} accept="image/svg+xml" />
                             <FormLayoutGroup top="Цвет QR-кода">
                                 <Div>
                                     <TwitterPicker triangle='hide' colors={foregroundPresets} color={foregroundColor}
