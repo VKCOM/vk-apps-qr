@@ -22,15 +22,17 @@
   "dependencies": {
     "@axetroy/react-download": "^1.1.1",
     "@vkontakte/icons": "^1.4.3",
-    "@vkontakte/vk-qr": "^1.1.5",
+    "@vkontakte/vk-qr": "^1.2.1",
     "@vkontakte/vkui": "^2.19.0",
     "@vkontakte/vkui-connect": "^1.1.3",
     "babel-eslint": "^9.0.0",
     "core-js": "^2.6.5",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
+    "react-color": "^2.17.3",
     "react-dom": "^16.8.4",
-    "save-svg-as-png": "^1.4.11"
+    "save-svg-as-png": "^1.4.11",
+    "query-string": "^6.5.0"
   },
   "browserslist": [
     ">0.2%",

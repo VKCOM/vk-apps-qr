@@ -1,18 +1,36 @@
 import React from 'react';
-import {Button, Checkbox, Div, FormLayout, Group, Input, Panel, PanelHeader, View} from '@vkontakte/vkui';
+import {
+    Button,
+    Checkbox,
+    Div,
+    FormLayout,
+    FormLayoutGroup,
+    Group,
+    Input,
+    Panel,
+    PanelHeader,
+    View
+} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import qrCodeGenerator from '@vkontakte/vk-qr';
 import Download from '@axetroy/react-download';
 import Icon24Download from '@vkontakte/icons/dist/24/download';
 import {saveSvgAsPng} from 'save-svg-as-png';
+import {TwitterPicker} from 'react-color';
+import queryString from 'query-string'
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            url: 'https://vk.com',
-            showLogo: true
+            url: 'https://vk.com/vkapps_qr',
+            isShowLogo: true,
+            logoData: false,
+            isShowBackground: true,
+            backgroundColor: '#ffffff',
+            foregroundColor: '#000000',
+            allowDownload: false
         };
 
         this.svgRef = React.createRef();
@@ -21,29 +39,52 @@ class App extends React.Component {
         this.savePNG = this.savePNG.bind(this);
     }
 
+    componentDidMount() {
+        const values = queryString.parse(window.location.search);
+        let platformsWithoutDownload = ['mobile_android', 'mobile_iphone'];
+        this.setState({allowDownload: !!platformsWithoutDownload.indexOf(values.vk_platform)});
+    }
+
     savePNG() {
         saveSvgAsPng(this.svgRef.current.children[0], 'png.png')
     }
 
     onChange(e) {
         const {name, value, checked} = e.currentTarget;
-        if (name === 'showLogo') {
+        if (name === 'isShowLogo' || name === 'isShowBackground') {
             this.setState({[name]: checked});
         } else {
             this.setState({[name]: value});
         }
     }
 
-    render() {
-        const {url, showLogo} = this.state;
+    onBackgroundColorChange = (color) => {
+        this.setState({backgroundColor: color.hex});
+    };
 
-        const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode', showLogo);
+    onForegroundColorChange = (color) => {
+        this.setState({foregroundColor: color.hex});
+    };
+
+    render() {
+        const {allowDownload, url, isShowLogo, isShowBackground, backgroundColor, foregroundColor} = this.state;
+        const options = {
+            isShowLogo: isShowLogo,
+            isShowBackground: isShowBackground,
+            backgroundColor: backgroundColor,
+            foregroundColor: foregroundColor,
+        };
+
+        const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode', options);
+
+        let backgroundPresets = ['#FFFFFF', '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7'];
+        let foregroundPresets = ['#000000', '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7'];
 
         return (
             <View activePanel="mainPanel">
                 <Panel id="mainPanel">
                     <PanelHeader>QR</PanelHeader>
-                    <Group>
+                    <Group title="Ссылка">
                         <FormLayout>
                             <Input
                                 type="string"
@@ -54,25 +95,50 @@ class App extends React.Component {
                                 status={url ? 'valid' : 'error'}
                                 bottom={url ? '' : 'Введите ссылку'}
                             />
-
-                            <Checkbox name="showLogo" checked={showLogo} onChange={this.onChange}>Использовать логотип
+                        </FormLayout>
+                    </Group>
+                    <Group title="Настройки">
+                        <FormLayout>
+                            <Checkbox name="isShowLogo" checked={isShowLogo} onChange={this.onChange}>Использовать
+                                логотип
                                 ВКонтакте</Checkbox>
+
+
+                            <FormLayoutGroup top="Цвет QR-кода">
+                                <Div>
+                                    <TwitterPicker triangle='hide' colors={foregroundPresets} color={foregroundColor}
+                                                   onChangeComplete={this.onForegroundColorChange}/>
+                                </Div>
+                            </FormLayoutGroup>
+
+                            <Checkbox name="isShowBackground" checked={isShowBackground}
+                                      onChange={this.onChange}>Фон</Checkbox>
+
+                            {isShowBackground ? (<FormLayoutGroup top="Цвет фона">
+                                <Div>
+                                    <TwitterPicker triangle='hide' colors={backgroundPresets} color={backgroundColor}
+                                                   onChangeComplete={this.onBackgroundColorChange}/>
+                                </Div>
+                            </FormLayoutGroup>) : (null)}
                         </FormLayout>
 
+                    </Group>
+
+                    <Div>
                         <Div style={{
                             textAlign: 'center',
                         }}>
                             <span ref={this.svgRef} dangerouslySetInnerHTML={{__html: url ? qrSvg : ''}}/>
                         </Div>
 
-                        <Div style={{display: 'flex', 'justifyContent': 'space-between'}}>
+                        {allowDownload ? (<Div style={{display: 'flex', 'justifyContent': 'space-between'}}>
                             <Button before={<Icon24Download/>} size="xl" style={{maxWidth: 'calc(50% - 4px)'}}
                                     onClick={this.savePNG} stretched>PNG</Button>
                             <Download file="qr.svg" content={qrSvg} style={{flexGrow: 1, maxWidth: 'calc(50% - 4px)'}}>
                                 <Button before={<Icon24Download/>} size="xl" stretched>SVG</Button>
                             </Download>
-                        </Div>
-                    </Group>
+                        </Div>) : (null)}
+                    </Div>
                 </Panel>
             </View>
         );
