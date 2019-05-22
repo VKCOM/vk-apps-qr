@@ -43,7 +43,7 @@ class App extends React.Component {
     componentDidMount() {
         const values = queryString.parse(window.location.search);
         let platformsWithoutDownload = ['mobile_android', 'mobile_iphone'];
-        this.setState({allowDownload: !!platformsWithoutDownload.indexOf(values.vk_platform)});
+        this.setState({allowDownload: platformsWithoutDownload.indexOf(values.vk_platform) == -1});
     }
 
     savePNG() {
@@ -51,17 +51,17 @@ class App extends React.Component {
     }
 
     onUpload(e) {
-      let self = this;
-      let file = e.currentTarget.files[0];
-      if (file && file.type  === 'image/svg+xml') {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          self.setState({
-            logoData: reader.result
-          });
-        };
-      }
+        let self = this;
+        let file = e.currentTarget.files[0];
+        if (file && file.type === 'image/svg+xml') {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                self.setState({
+                    logoData: reader.result
+                });
+            };
+        }
     }
 
     onChange(e) {
@@ -104,7 +104,6 @@ class App extends React.Component {
                         <FormLayout>
                             <Input
                                 type="string"
-                                top="Ссылка"
                                 name="url"
                                 value={url}
                                 onChange={this.onChange}
@@ -117,10 +116,11 @@ class App extends React.Component {
                         <FormLayout>
                             <Checkbox name="isShowLogo" checked={isShowLogo} onChange={this.onChange}>Использовать
                                 логотип
-                                </Checkbox>
+                            </Checkbox>
 
-                            <Input top="SVG-логотип" type="file" name="embed" onChange={this.onUpload} accept="image/svg+xml" />
-                            <FormLayoutGroup top="Цвет QR-кода">
+                            {isShowLogo ? (<Input top="SVG-логотип" type="file" name="embed" onChange={this.onUpload}
+                                                  accept="image/svg+xml"/>) : (null)}
+                            {isShowLogo ? (<FormLayoutGroup top="Цвет QR-кода">
                                 <Div>
                                     <div style={{
                                         borderRadius: 25,
@@ -133,7 +133,8 @@ class App extends React.Component {
                                                       onChangeComplete={this.onForegroundColorChange}/>
                                     </div>
                                 </Div>
-                            </FormLayoutGroup>
+                            </FormLayoutGroup>) : (null)}
+
 
                             <Checkbox name="isShowBackground" checked={isShowBackground}
                                       onChange={this.onChange}>Фон</Checkbox>
