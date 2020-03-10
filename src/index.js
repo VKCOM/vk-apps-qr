@@ -2,7 +2,7 @@ import 'core-js/es6/map';
 import 'core-js/es6/set';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import connect from '@vkontakte/vkui-connect';
+import connect from '@vkontakte/vk-bridge';
 import App from './App';
 
 connect.subscribe((e) => {

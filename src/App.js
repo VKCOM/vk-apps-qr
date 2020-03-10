@@ -89,6 +89,7 @@ class App extends React.Component {
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
             logoData: logoData,
+            ecc: 0
         };
 
         const qrSvg = qrCodeGenerator.createQR(url, 256, 'classCode', options);
